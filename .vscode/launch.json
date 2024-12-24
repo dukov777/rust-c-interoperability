@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C with LLDB",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/main.out",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "Build C Code",
+            "sourceLanguages": [
+                "c",
+                "rust"
+            ],
+        }
+    ]
+}

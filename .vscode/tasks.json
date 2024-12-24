@@ -1,0 +1,66 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Rust Library",
+            "type": "shell",
+            "command": "cargo",
+            "args": [
+                "build"
+            ],
+            "options": {
+                "cwd": "rust_lib"
+            }
+        },
+        {
+            "label": "Build C Code",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-g",
+                "C/main.c",
+                "-L",
+                "${workspaceFolder}/rust_lib/target/debug",
+                "-lrust_lib", // Link the static Rust library
+                "-o",
+                "build/main.out"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "build/*.*",
+                "rust_lib/target"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build All",
+            "type": "shell",
+            "dependsOn": [
+                "Build Rust Library",
+                "Build C Code"
+            ],
+            "dependsOrder": "sequence" // Ensure sequential execution
+        },
+        {
+            "label": "Rebuild All",
+            "type": "shell",
+            "dependsOn": [
+                "Clean",
+                "Build All"
+            ],
+            "dependsOrder": "sequence" // Ensure sequential execution
+        }
+    ]
+}
