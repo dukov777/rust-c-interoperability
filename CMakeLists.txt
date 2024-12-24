@@ -5,8 +5,14 @@ project(MyProject)
 set(RUST_LIB_DIR ${CMAKE_SOURCE_DIR}/rust_lib)
 set(RUST_LIB_OUTPUT_DIR ${RUST_LIB_DIR}/target/debug)
 
-# Add C source files
+# Set path for the C static library source files
+set(C_STATIC_LIB_SRC ${CMAKE_SOURCE_DIR}/C/)
+
+# Add C source files (main.c)
 add_executable(main ${CMAKE_SOURCE_DIR}/C/main.c)
+
+# Add C static library target
+add_library(other_lib STATIC ${C_STATIC_LIB_SRC}/c_function.c)
 
 # Add a custom command to build the Rust static library
 add_custom_command(
@@ -28,13 +34,13 @@ add_dependencies(main build_rust_lib)
 # Link the Rust static library to the C executable
 target_link_libraries(main ${RUST_LIB_OUTPUT_DIR}/librust_lib.a)
 
+# Link the C static library to the C executable
+target_link_libraries(main other_lib)
+
 # Include directories for any headers if required by Rust (optional)
 include_directories(${RUST_LIB_DIR}/include)
 
 # Custom clean target for both Rust and C build directories
-
-# Custom clean target with a different name (avoid using 'clean')
-# Custom clean target with the correct working directory for Rust
 add_custom_target(
     clean_all
     COMMAND cargo clean
@@ -43,4 +49,3 @@ add_custom_target(
     COMMAND rm -rf ${RUST_LIB_DIR}/target/ # Force cleaning the Rust target directory
     COMMENT "Cleaning Rust and C build directories"
 )
-

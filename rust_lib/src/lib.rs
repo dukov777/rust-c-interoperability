@@ -13,8 +13,15 @@ mod tests {
     }
 }
 
+extern "C" {
+    fn c_function(x: i32) -> i32; // Declare the C function
+}
+
+
 // rust_lib/src/lib.rs
 #[no_mangle]
 pub extern "C" fn my_rust_function(x: i32) -> i32 {
-    x + 2
+    unsafe {
+        c_function(x) // Call the C function
+    }
 }
