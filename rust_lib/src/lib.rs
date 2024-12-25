@@ -20,7 +20,7 @@ extern "C" {
 
 // rust_lib/src/lib.rs
 #[no_mangle]
-pub extern "C" fn my_rust_function(x: i32) -> i32 {
+pub extern "C" fn rust_function(x: i32) -> i32 {
     unsafe {
         c_function(x) // Call the C function
     }
