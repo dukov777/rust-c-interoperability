@@ -4,15 +4,13 @@ project(MyProject)
 # Set paths to Rust code and build output
 set(RUST_LIB_DIR ${CMAKE_SOURCE_DIR}/rust_lib)
 set(RUST_LIB_OUTPUT_DIR ${RUST_LIB_DIR}/target/debug)
+set(C_LIB_OUTPUT_DIR ${CMAKE_SOURCE_DIR}/c_lib/build)
 
 # Set path for the C static library source files
 set(C_STATIC_LIB_SRC ${CMAKE_SOURCE_DIR}/C/)
 
 # Add C source files (main.c)
 add_executable(main ${CMAKE_SOURCE_DIR}/C/main.c)
-
-# Add C static library target
-add_library(other_lib STATIC ${C_STATIC_LIB_SRC}/c_function.c)
 
 # Add a custom command to build the Rust static library
 add_custom_command(
@@ -31,11 +29,12 @@ add_custom_target(
 
 add_dependencies(main build_rust_lib)
 
+# Link the C static library to the C executable
+# target_link_libraries(main other_lib)
+
 # Link the Rust static library to the C executable
 target_link_libraries(main ${RUST_LIB_OUTPUT_DIR}/librust_lib.a)
-
-# Link the C static library to the C executable
-target_link_libraries(main other_lib)
+target_link_libraries(main ${C_LIB_OUTPUT_DIR}/libstatic_c_lib.a)
 
 # Include directories for any headers if required by Rust (optional)
 include_directories(${RUST_LIB_DIR}/include)
